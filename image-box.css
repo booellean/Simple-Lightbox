@@ -75,3 +75,16 @@ figure#image-container.wide>img#image-swap{
   height: auto;
   margin: 0 auto;
 }
+
+img#cross{
+  position: fixed;
+  top: 1.2em;
+  left: 1.2em;
+  width: 2em;
+  height: 2em;
+  z-index: 100;
+}
+
+.hide{
+  display: none;
+}
