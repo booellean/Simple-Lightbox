@@ -1,7 +1,5 @@
 // Basic code for resize and initial load //
 
-
-
 document.getElementById('image-swap').addEventListener('load', detectAspectRatio);
 window.addEventListener('resize', detectAspectRatio);
 document.getElementById('cross').addEventListener('click', closeImageBox);
@@ -14,14 +12,14 @@ function detectAspectRatio() {
 
   //all variables below are for determining ratios between images, screen sizes and the figure container
 
-  var isWidth = document.getElementById('image-swap').clientWidth;
-  var isHeight = document.getElementById('image-swap').clientHeight;
+  var isWidth = document.getElementById('image-swap').naturalWidth;
+  var isHeight = document.getElementById('image-swap').naturalHeight;
   var isRatio = isWidth/isHeight;
 
   var figWidth = document.getElementById('text-container').clientWidth;
   var figHeight = document.getElementById('text-container').clientHeight;
 
-  var contWidth = isWidth + figWidth;
+  var contWidth = document.getElementById('image-swap').clientWidth + 480; //number is minimum width I want the figcaption to be at .left
   var contRatio = contWidth/figHeight;
 
   var winWidth = window.innerWidth;
@@ -29,11 +27,10 @@ function detectAspectRatio() {
   var winRatio = winWidth/winHeight;
 
   console.log(`WinRatio ${winRatio} isRatio ${isRatio}`);
-  console.log(contWidth);
-  console.log(figHeight);
+  console.log(`fWidth ${figWidth} cWidth ${contWidth} fHeight ${figHeight} fRatio ${contRatio}`);
 
   if(contRatio>=1){
-    if(winRatio>isRatio){
+   if(winRatio>(isRatio + .35)){  //.5 helps keep the figcaption a readable width
       imageContainer.classList.remove('wide');
       imageContainer.classList.add('tall');
     }else{
