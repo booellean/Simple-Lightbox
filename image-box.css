@@ -18,6 +18,7 @@ div#dark-box{
   position: fixed;
   top: 0;
   left: 0;
+  transition: opacity .7s linear, left .8s ease-in-out;
 }
 
 figure#image-container{
@@ -97,6 +98,8 @@ img#cross{
 
 .hide{
   display: none;
+  left: 100%;
+  opacity: 0;
 }
 
 /*stylings for all preview images*/
