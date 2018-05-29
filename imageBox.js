@@ -2,9 +2,12 @@
 
 
 
-// document.getElementById('image-container').addEventListener('load', detectAspectRatio);
-window.addEventListener('load', detectAspectRatio);
+document.getElementById('image-swap').addEventListener('load', detectAspectRatio);
 window.addEventListener('resize', detectAspectRatio);
+document.getElementById('cross').addEventListener('click', closeImageBox);
+document.querySelectorAll('.preview-image').forEach(function(figure){
+  figure.addEventListener('click', openImageBox);
+});
 
 function detectAspectRatio() {
   var imageContainer = document.getElementById('image-container');
@@ -16,7 +19,7 @@ function detectAspectRatio() {
   var isRatio = isWidth/isHeight;
 
   var figWidth = document.getElementById('text-container').clientWidth;
-  var figHeight = document.getElementById('text-container').clientHieght;
+  var figHeight = document.getElementById('text-container').clientHeight;
 
   var contWidth = isWidth + figWidth;
   var contRatio = contWidth/figHeight;
@@ -25,7 +28,9 @@ function detectAspectRatio() {
   var winHeight = window.innerHeight;
   var winRatio = winWidth/winHeight;
 
-  console.log(`${isRatio} and ${docRatio} and ${contWidth}`);
+  console.log(`WinRatio ${winRatio} isRatio ${isRatio}`);
+  console.log(contWidth);
+  console.log(figHeight);
 
   if(contRatio>=1){
     if(winRatio>isRatio){
@@ -39,43 +44,13 @@ function detectAspectRatio() {
     imageContainer.classList.remove('tall');
     imageContainer.classList.add('wide');
   }
-	
-	// var descriptionSide = document.getElementById('description-side');
-	// var imageSide = document.getElementById('image-side');
-	// var changeoutText = document.getElementById('changeout-text');
-	// var changeoutImage = document.getElementById('changeout-image');
-	// var para = changeoutText.querySelector('p');
-	
-	// var windowRatio = docWidth/docHeight;
-	// var windowRatioModified = windowRatio - .35;
-	// var imageRatio = imgWidth/imgHeight;
-	
-	// if(windowRatioModified >= imageRatio) {
-	// 	imageSide.style.height = '90%';
-	// 	imageSide.style.width = '60%';
-	// 	changeoutText.style.textAlign = 'right';
-	// 	changeoutText.style.paddingLeft = '70%';
-	// 	changeoutText.style.paddingTop = '';
-	// 	para.style.textAlign = 'right';
-	// }else {
-	// 	imageSide.style.height = '67%';
-	// 	imageSide.style.width = '86%';
-	// 	changeoutText.style.textAlign = 'left';
-	// 	changeoutText.style.paddingLeft = '';
-	// 	changeoutText.style.paddingTop = document.getElementById('image-side').clientHeight + 5 + 'px';
-	// 	para.style.textAlign = 'left';
-	// }
-	// console.log(windowRatioModified + ' ' + imageRatio);
 }
 
 function openImageBox(el) {
-	var imgBox =document.getElementById('dark-box');
-	var elName = this.id;
-	
+	var drkBox =document.getElementById('dark-box');
+	var imgId = this.id;
+  
 	var cross = document.getElementById('cross');
-	var footerTag = document.getElementById('footer');
-	var htmlTag = document.getElementById('html');
-	var mainDiv = document.getElementById('main');
   
   //the code below hides the x button on mobile so the back button doesn't interfere with navigation
 	if(/Android/i.test(navigator.userAgent)){
@@ -83,30 +58,41 @@ function openImageBox(el) {
 		cross.style.display = 'none';
 	}
 		 
-	for (var i=0; i<images.length; ++i){
-		var imageName = images[i].name;
+	for (var j=0; j<images.length; ++j){
+    var i = images[j];
+		var iName = images[j].name;
+    
+    console.log(iName);
+    
+    var changeH1 = document.getElementById('swap-h1');
+    var changeP = document.getElementById('swap-p');
+		var changeImage = document.getElementById('image-swap');
 		
-		var changeoutText = document.getElementById('changeout-text');
-		var changeoutImage = document.getElementById('changeout-image');
-		
-		if (imageName.match(elName)){
-			if (elName === imageName){
-				if (window.outerWidth > 610){
-					changeoutImage.src = images[i].sourceSmall;
-				}else{
-					changeoutImage.src = images[i].source;
-				}
-				changeoutText.innerHTML = images[i].title + images[i].description;
+		if (iName.match(imgId)){
+			if (imgId === iName){
+        changeImage.src = 'images/'+iName + i.source;
+        changeImage.srcset= 'images/'+iName + i.sourceSmall + ' 320w, ' + 'images/'+iName+i.sourcMedium + ' 530w '
+        changeP.innerHTML = i.description;
+        changeH1.innerHTML = i.title;
 			}else {
-				changeoutImage.src = brokenLink.source;
-				changeoutText.innerHTML = brokenLink.description;
+				changeImage.src = brokenLink.source;
+				changeText.innerHTML = brokenLink.description;
 			}
 		}
 	}
 	
-	mainDiv.style.pointerEvents = 'none';
-	footerTag.style.pointerEvents = 'none';
-	htmlTag.style.overflow = 'hidden';
-	imgBox.style.display = 'flex';
-	imgBox.className = 'fade-in';
+	drkBox.classList.remove('hide');
+}
+
+function closeImageBox() {
+	var drkBox = document.getElementById('dark-box');
+	drkBox.classList.add('hide');
+}
+
+function handleBackButton(event){
+	var drkBox =document.getElementById('dark-box');
+	
+	if(!location.hash){
+		closeImageBox();
+	}
 }
